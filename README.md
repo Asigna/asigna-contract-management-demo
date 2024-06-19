@@ -1,8 +1,5 @@
-# React + Vite
+# Asigna Demo contract management
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This repo can be used as a template to deploy and manage contracts through Asigna multisig extension.
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Modify your contract calls and deploys in `Contracts.jsx` and deploy/use locally this js page to be able to control your DAO contracts with Asigna multisig.
