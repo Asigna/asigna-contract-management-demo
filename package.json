@@ -10,14 +10,19 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@asigna/stx-connect": "^0.0.5",
+    "@material-ui/core": "^4.12.4",
     "@stacks/connect": "7.10.0",
     "@stacks/connect-react": "^22.4.2",
-    "@stacks/network": "^6.13.0",
-    "@stacks/transactions": "^6.15.0",
+    "@stacks/network": "6.16.0",
+    "@stacks/transactions": "6.17.0",
+    "classnames": "^2.5.1",
     "jotai": "^2.8.3",
     "patch-package": "^8.0.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-loader-spinner": "^6.1.6",
+    "styled-components": "^6.1.16"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",

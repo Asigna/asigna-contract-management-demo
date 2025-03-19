@@ -1,15 +1,39 @@
 import { openContractCall, openContractDeploy } from '@stacks/connect';
 import { StacksMainnet, StacksTestnet } from '@stacks/network';
-import { AnchorMode, PostConditionMode, noneCV, principalCV, uintCV } from '@stacks/transactions';
+import { AnchorMode,BytesReader, deserializeTransaction, broadcastTransaction, PostConditionMode, noneCV, principalCV, uintCV, makeUnsignedSTXTokenTransfer, makeUnsignedContractCall } from '@stacks/transactions';
 import { useAddress, useNetwork } from '../atoms';
-
+import { bytesToHex } from '@stacks/common';
+import { useAsignaConnect, useAsignaOptions } from '@asigna/stx-connect';
+import { Buffer } from 'buffer';
+// import {useAsignaOptions, useAsignaConnect} from './asigna';
 // CONTRACT_CALL
 
 const Contracts = () => {
     const stacksNetwork = useNetwork() === 'mainnet' ? new StacksMainnet() : new StacksTestnet();
     const [address] = useAddress();
+    const optionsMs = useAsignaOptions();
+    const {openAsignaStxTokenTransfer, openAsignaContractCall} = useAsignaConnect();
 
-    const handleCall = () => {
+
+    const handleSend = async () => {
+        const options = {
+            recipient: 'SP31PNYDZ8Q86B47BYW67YD9PVXVSZ3JRJAN9DJDK',
+            amount: 2000,
+            network: stacksNetwork,
+            anchorMode: AnchorMode.Any,
+            fee: 2222,
+            ...optionsMs,
+        }
+        console.log(options);
+        const transaction = await makeUnsignedSTXTokenTransfer(options);
+        const serialized = bytesToHex(transaction.serialize());
+        const got = await openAsignaStxTokenTransfer(serialized, {});
+        const bytesReader = new BytesReader(Buffer.from(got, 'hex'));
+        const deserializedTx = deserializeTransaction(bytesReader);
+        broadcastTransaction(deserializedTx);
+    }
+
+    const handleCall = async () => {
         const functionArgs = [
             uintCV(100),
             principalCV(address),
@@ -19,15 +43,23 @@ const Contracts = () => {
 
         const contractCallOptions = {
             network: stacksNetwork,
-            anchorMode: AnchorMode.Any,
+            anchorMode: AnchorMode.OnChainOnly,
             contractAddress: 'SP351ZJK9F5AWZJEEZGZ7NZKSRKA65EWFRR48V9KS',
-            contractName: 'ALL',
+            contractName: 'ALL2',
             functionName: 'transfer',
             functionArgs,
-            postConditionMode: PostConditionMode.Any,
+            postConditionMode: PostConditionMode.Allow,
             postConditions: [],
+            fee: 70000,
+            onFinish: () => {
+                console.log()
+            },
+            ...optionsMs,
         }
-        openContractCall(contractCallOptions, window.AsignaProvider);
+        const transaction = await makeUnsignedContractCall(contractCallOptions);
+        const serialized = bytesToHex(transaction.serialize());
+        const res = await openAsignaContractCall(serialized, window.AsignaProvider);
+        console.log('RES', res);
     }
 
     const handleDeploy = () => {
@@ -55,6 +87,8 @@ const Contracts = () => {
 
     return <div style={{display: 'flex', gap: 18, fontWeight: 'bold', fontSize: 20}}>
         <div onClick={handleCall}>Call</div>
+        <div onClick={handleSend}>Send</div>
+
         <div onClick={handleDeploy}>Deploy</div>
     </div>
 }
