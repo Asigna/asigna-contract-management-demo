@@ -1,6 +1,6 @@
 import { AppConfig, UserSession, showConnect } from '@stacks/connect';
 import './App.css'
-import Contracts from './Contracts';
+import Contracts from './Contracts.tsx';
 import { useAddress, useNetwork } from '../atoms';
 import { AsignaSignActionModals, useAsignaConnect, useAsignaSafeInfo } from '@asigna/stx-connect';
 import { useEffect } from 'react';

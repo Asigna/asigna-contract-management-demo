@@ -18,7 +18,7 @@ const Contracts = () => {
         amount: '2000',
         network: new StacksMainnet(),
         anchorMode: AnchorMode.Any,
-        // fee: 2222,
+        fee: 2222,
     }
     const functionArgs = [
         uintCV(100),
@@ -35,7 +35,7 @@ const Contracts = () => {
         functionArgs,
         postConditionMode: PostConditionMode.Allow,
         postConditions: [],
-        fee: 60000,
+        fee: 70000,
     }
     
     const deployOptions = {
@@ -62,39 +62,39 @@ const Contracts = () => {
     const {openAsignaStxTokenTransfer, openAsignaContractCall, openAsignaDeployContract} = useAsignaConnect();
 
 
-    const handleSend = async (withModal) => {
+    const handleSend = async (withModal?: boolean) => {
         if (withModal) {
             const got = await openAsignaStxTokenTransfer(transferOptions, {});
         } else {
-            openSTXTransfer(transferOptions, window.AsignaProvider);
+            openSTXTransfer(transferOptions);
         }
     }
 
-    const handleCall = async (withModal) => {
+    const handleCall = async (withModal?: boolean) => {
         if (withModal) {
-            makeUnsignedContractCall(callOptions)
             const res = await openAsignaContractCall(callOptions, {});
         } else {
-            openContractCall(callOptions,  window.AsignaProvider);
+            openContractCall(callOptions);
         }
     }
 
-    const handleDeploy = async (withModal) => {
+    const handleDeploy = async (withModal?: boolean) => {
         if (withModal) {
             const res = await openAsignaDeployContract(deployOptions, {});
         } else {
-            openContractDeploy(deployOptions,  window.AsignaProvider);
+            openContractDeploy(deployOptions);
         }
     }
 
-    return <div style={{display: 'flex', flexDirection: 'column', gap: 18, fontWeight: 'bold', fontSize: 20}}>
+    return <div style={{display: 'flex', gap: 18, fontWeight: 'bold', fontSize: 20}}>
         <div>
+            <div>Raw actions</div>
             <div onClick={() => handleCall()}>Call</div>
             <div onClick={() => handleSend()}>Send</div>
             <div onClick={() => handleDeploy()}>Deploy</div>
         </div>
         <div>
-            <div>Waiting modal actions:</div>
+            <div>Modal actions</div>
             <div onClick={() => handleCall(true)}>Call</div>
             <div onClick={() => handleSend(true)}>Send</div>
             <div onClick={() => handleDeploy(true)}>Deploy</div>
