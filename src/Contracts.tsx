@@ -1,4 +1,3 @@
-import React from 'react';
 import { request } from '@stacks/connect';
 import { noneCV, principalCV, uintCV } from '@stacks/transactions';
 import { useAddress, useNetwork } from '../atoms';
@@ -6,6 +5,8 @@ import { useAddress, useNetwork } from '../atoms';
 const Contracts = () => {
     const network = useNetwork();
     const [address] = useAddress();
+
+    if (!address) return null;
 
     const transferOptions = {
         recipient: 'SP31PNYDZ8Q86B47BYW67YD9PVXVSZ3JRJAN9DJDK',
