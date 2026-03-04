@@ -1,50 +1,40 @@
-import { AppConfig, UserSession, showConnect } from '@stacks/connect';
+import { connect, disconnect, isConnected, getLocalStorage } from '@stacks/connect';
 import './App.css'
 import Contracts from './Contracts.tsx';
-import { useAddress, useNetwork } from '../atoms';
-import { AsignaSignActionModals, useAsignaConnect, useAsignaSafeInfo } from '@asigna/stx-connect';
+import { useAddress } from '../atoms';
 import { useEffect } from 'react';
 
-const appConfig = new AppConfig(['store_write', 'publish_data']);
-const userSession = new UserSession({ appConfig });
-
-const myAppName = 'Demo';
-const myAppIcon = '';
-
 function App() {
-  const network = useNetwork();
   const [address, setAddress] = useAddress();
-  const {requestSafeInfo} = useAsignaConnect();
 
-  const handleConnect = () => showConnect({
-    userSession,
-    appDetails: {
-      name: myAppName,
-      icon: myAppIcon,
-    },
-    onFinish: (resp) => {
-      console.log(resp)
-      setAddress(resp.authResponsePayload.profile.stxAddress[network]);
-    },
-    onCancel: () => {},
-  });
-
-
+  // Hydrate address from localStorage if already connected
   useEffect(() => {
-    requestSafeInfo();
+    if (isConnected()) {
+      const data = getLocalStorage();
+      setAddress(data?.addresses?.stx?.[0]?.address);
+    }
   }, []);
 
-  if (!address) {
-    return <div onClick={handleConnect}>
-      Connect
-    </div>
-  }
+  const handleConnect = async () => {
+    await connect();
+    const data = getLocalStorage();
+    setAddress(data?.addresses?.stx?.[0]?.address);
+  };
 
+  const handleDisconnect = () => {
+    disconnect();
+    setAddress(undefined);
+  };
+
+  if (!address) {
+    return <div onClick={handleConnect}>Connect</div>;
+  }
 
   return <div>
     Connected with {address}
+    <div onClick={handleDisconnect} style={{ cursor: 'pointer', fontSize: 14 }}>Disconnect</div>
     <Contracts />
-    <AsignaSignActionModals/>
-  </div>
+  </div>;
 }
+
 export default App;
