@@ -13,7 +13,7 @@ function App() {
       const data = getLocalStorage();
       setAddress(data?.addresses?.stx?.[0]?.address);
     }
-  }, []);
+  }, [setAddress]);
 
   const handleConnect = async () => {
     await connect();
@@ -27,7 +27,7 @@ function App() {
   };
 
   if (!address) {
-    return <div onClick={handleConnect}>Connect</div>;
+    return <div onClick={handleConnect} style={{ cursor: 'pointer' }}>Connect</div>;
   }
 
   return <div>
