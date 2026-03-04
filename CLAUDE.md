@@ -15,7 +15,7 @@ Package manager: **yarn** (yarn.lock is present).
 
 ## Purpose
 
-A minimal React + Vite template for deploying and managing Stacks blockchain contracts through the **Asigna multisig** extension. The primary customization point is `src/Contracts.tsx` — modify contract calls, deploys, and STX transfers there.
+A minimal React + Vite template for deploying and managing Stacks blockchain contracts through any Stacks wallet extension. The primary customization point is `src/Contracts.tsx` — modify contract calls, deploys, and STX transfers there.
 
 ## Architecture
 
