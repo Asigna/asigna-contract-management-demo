@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@stacks/connect": "8.2.5",
-    "@stacks/transactions": "6.17.0",
+    "@stacks/transactions": "7.3.1",
     "jotai": "^2.8.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
